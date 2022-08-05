@@ -1,3 +1,4 @@
+import * as trpc from "@trpc/server";
 import { string, z } from "zod";
 import { createRouter } from "./context";
 
@@ -28,6 +29,14 @@ export const userRouter = createRouter()
           id: true,
         },
       });
-      return user;
+
+      if (!user) {
+        throw new trpc.TRPCError({
+          message: "Wrong username",
+          code: "NOT_FOUND",
+        });
+      } else {
+        return user;
+      }
     },
   });
