@@ -1,95 +1,113 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import useLocalStorage from "../hooks/useLocalstorage";
 import { trpc } from "../utils/trpc";
 
 export function Header() {
   const router = useRouter();
-  const [userId1, setUserId1] = useLocalStorage("newcy-user", "");
-
-  const isLoggedIn = useMemo(() => {
-    return !!userId1;
-  }, [userId1]);
-
-  console.log("isLoggedIn", isLoggedIn);
-  console.log("usedId", userId1);
-
+  const [error, setError] = useState<string>();
+  const [userId, setUserId] = useLocalStorage("newcy-userid", "");
   const [inputUsername, setInputUsername] = useState<string>("");
 
+  const isLoggedIn = useMemo(() => {
+    console.log("userid", userId);
+    return userId !== undefined && userId !== "undefined";
+  }, [userId]);
+
+  console.log("isLoggedIN", isLoggedIn);
   const login = trpc.useMutation(["userlogin"], {
     onSuccess: (data) => {
       if (!data) {
-        console.log("user does not exists");
         return;
       }
-      setUserId1(data.id);
-      console.log("userdata on success", data);
+      setUserId(data.id);
+    },
+    onError: (error) => {
+      setError(error.message);
+      console.log("error", error);
     },
   });
 
   const signup = trpc.useMutation(["usersignup"], {
     onSuccess: (data) => {
-      setUserId1(data.id);
-      console.log("userdata on success", data);
+      setUserId(data.id);
+    },
+    onError: (error) => {
+      console.log("error", error);
     },
   });
 
   const confirmLogin = () => {
-    const user = login.mutate({ username: inputUsername });
-    console.log("userId in login", user);
+    login.mutate({ username: inputUsername });
   };
 
   const confirmSignup = () => {
-    const user = signup.mutate({ username: inputUsername });
-    console.log("userId in signyp", user);
+    error && setError(undefined);
+    signup.mutate({ username: inputUsername });
   };
 
   const handleChange = (e: any) => {
     e.preventDefault();
+    setError(undefined);
     setInputUsername(e.target.value);
   };
 
   const handleLogout = (e: any) => {
     e.preventDefault();
-    setUserId1(undefined);
+    setUserId(undefined);
+    router.reload();
   };
 
   return (
     <header>
-      <div className="m-10 flex flex-row bg-slate-400 justify-between">
+      <div className="flex flex-row bg-blue-400 justify-between">
         <div className="flex flex-row items-start space-x-5">
-          <div className="flex w-full flex-row items-start lg:ml-auto lg:inline-flex lg:h-auto  lg:w-auto lg:flex-row">
+          <div className="flex w-full flex-row items-start lg:ml-auto lg:inline-flex lg:h-auto p-10 space-x-20  lg:w-auto lg:flex-row">
             <Link href="/items">
-              <a className="w-full items-center justify-center rounded px-3 py-2 font-bold text-white hover:bg-green-600 hover:text-white lg:inline-flex lg:w-auto ">
+              <a className="w-full items-center justify-center rounded px-3 py-2 font-bold text-white text-3xl hover:bg-green-600 hover:text-white lg:inline-flex lg:w-auto ">
                 Items
-              </a>
-            </Link>
-            <Link href="/create">
-              <a className="w-full items-center justify-center rounded px-3 py-2 font-bold text-white hover:bg-green-600 hover:text-white lg:inline-flex lg:w-auto ">
-                Create Item
               </a>
             </Link>
           </div>
         </div>
-        <div className="flex flex-row space-x-5 mx-5">
-          {isLoggedIn ? (
-            <>
-              <p>You are logged in with id: {userId1}</p>
-              <button onClick={handleLogout}>Logout</button>
-            </>
-          ) : (
-            <>
-              <input
-                className="m-5"
-                name="username"
-                placeholder="Enter username"
-                onChange={handleChange}
-              />
-              <button onClick={confirmLogin}>Login</button>
-              <button onClick={confirmSignup}>Signup</button>
-            </>
-          )}
+        <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-row space-x-5 mx-10">
+            {isLoggedIn ? (
+              <>
+                <p>You are logged in with id: {userId}</p>
+                <button
+                  className="border-r-2 rounded-lg w-24 bg-orange-200"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <input
+                  className="m-5"
+                  name="username"
+                  placeholder="Enter username"
+                  onChange={handleChange}
+                />
+                <button
+                  className="border-r-2 rounded-lg w-24 bg-green-200"
+                  onClick={confirmLogin}
+                >
+                  Login
+                </button>
+                <button
+                  className="border-r-2 rounded-lg w-24 bg-green-200"
+                  onClick={confirmSignup}
+                >
+                  Signup
+                </button>
+
+                {error && <p>{error}</p>}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </header>

@@ -36,7 +36,7 @@ export default withTRPC<AppRouter>({
     let token: string | null;
 
     if (typeof window !== "undefined") {
-      token = window.localStorage.getItem("userid");
+      token = window.localStorage.getItem("newcy-userid");
     }
 
     return {
