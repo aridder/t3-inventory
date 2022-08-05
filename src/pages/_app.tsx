@@ -4,9 +4,15 @@ import type { AppRouter } from "../server/router";
 import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import "../styles/globals.css";
+import { Header } from "../components/Header";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
-  return <Component {...pageProps} />;
+  return (
+    <>
+      <Header />
+      <Component {...pageProps} />
+    </>
+  );
 };
 
 const getBaseUrl = () => {
@@ -27,9 +33,20 @@ export default withTRPC<AppRouter>({
      */
     const url = `${getBaseUrl()}/api/trpc`;
 
+    let token: string | null;
+
+    if (typeof window !== "undefined") {
+      token = window.localStorage.getItem("userid");
+    }
+
     return {
       url,
       transformer: superjson,
+      headers() {
+        return {
+          Authorization: token === null ? "" : token,
+        };
+      },
       /**
        * @link https://react-query.tanstack.com/reference/QueryClient
        */
