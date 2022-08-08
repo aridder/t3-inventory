@@ -11,9 +11,10 @@ datasource db {
 }
 
 model User {
-    id       String @id @default(cuid())
-    username String @unique
-    items    Item[]
+    id        String   @id @default(cuid())
+    username  String   @unique
+    items     Item[]
+    createdAt DateTime @default(now())
 }
 
 model Item {
@@ -22,12 +23,14 @@ model Item {
     owner        User           @relation(references: [id], fields: [ownerId])
     ownerId      String
     ItemTransfer ItemTransfer[]
+    createdAt    DateTime       @default(now())
 }
 
 model ItemTransfer {
-    id         Int    @id @default(autoincrement())
-    item       Item   @relation(fields: [itemId], references: [id])
+    id         Int      @id @default(autoincrement())
+    item       Item     @relation(fields: [itemId], references: [id])
     itemId     String
     fromUserId String
     toUserId   String
+    createdAt  DateTime @default(now())
 }
