@@ -44,7 +44,7 @@ export default withTRPC<AppRouter>({
       transformer: superjson,
       headers() {
         return {
-          Authorization: token === null ? "" : token,
+          Authorization: token ? token : "",
         };
       },
       /**

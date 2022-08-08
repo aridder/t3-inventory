@@ -7,7 +7,7 @@ import { trpc } from "../utils/trpc";
 export function Header() {
   const router = useRouter();
   const [error, setError] = useState<string>();
-  const [userId, setUserId] = useLocalStorage("newcy-userid", "");
+  const [userId, setUserId] = useLocalStorage("newcy-userid", undefined);
   const [inputUsername, setInputUsername] = useState<string>("");
 
   const isLoggedIn = useMemo(() => {
@@ -16,7 +16,7 @@ export function Header() {
   }, [userId]);
 
   console.log("isLoggedIN", isLoggedIn);
-  const login = trpc.useMutation(["userlogin"], {
+  const login = trpc.useMutation(["user.login"], {
     onSuccess: (data) => {
       if (!data) {
         return;
@@ -29,7 +29,7 @@ export function Header() {
     },
   });
 
-  const signup = trpc.useMutation(["usersignup"], {
+  const signup = trpc.useMutation(["user.signup"], {
     onSuccess: (data) => {
       setUserId(data.id);
     },

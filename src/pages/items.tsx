@@ -9,7 +9,7 @@ import { trpc } from "../utils/trpc";
 const Items: NextPage = () => {
   const [item, setItem] = useState<Item>();
 
-  const listUserItems = trpc.useQuery(["itemlist-own"]);
+  const listUserItems = trpc.useQuery(["item.list-own"]);
 
   const transferItemOnSuccess = () => {
     setItem(undefined);

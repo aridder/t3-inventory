@@ -12,7 +12,7 @@ const ItemCreate: NextPage<ItemCreateProps> = ({ onSuccess }) => {
   const [itemTitle, setItemTitle] = useState<string>();
   const [error, setError] = useState<string>();
 
-  const createItemMutation = trpc.useMutation(["itemcreate"], {
+  const createItemMutation = trpc.useMutation(["item.create"], {
     onSuccess: (data) => {
       inputRef!.current!.value = "";
       setItemTitle(undefined);

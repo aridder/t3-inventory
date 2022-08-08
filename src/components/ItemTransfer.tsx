@@ -12,7 +12,7 @@ const ItemTransfer: NextPage<ItemTransferProp> = ({ item, onSuccess }) => {
   const [error, setError] = useState<string>();
   const [toUserId, setToUserId] = useState<string>();
 
-  const transferItemMutation = trpc.useMutation(["itemtransfer"], {
+  const transferItemMutation = trpc.useMutation(["item.transfer"], {
     onSuccess: (data) => {
       onSuccess();
     },
