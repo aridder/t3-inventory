@@ -14,6 +14,10 @@ const ItemList: NextPage<ItemCreateProps> = ({ items, onItemClick }) => {
       <div className="flex flex-col">
         <p className="text-2xl mb-5">Your things</p>
       </div>
+      {items.length === 0 && (
+        <p className="text-2l mb-5">You do not have any things registered</p>
+      )}
+
       {items.map((item, index) => {
         return (
           <div

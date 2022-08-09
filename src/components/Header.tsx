@@ -66,9 +66,14 @@ export function Header() {
       <div className="flex flex-row bg-blue-400 justify-between">
         <div className="flex flex-row items-start space-x-5">
           <div className="flex w-full flex-row items-start lg:ml-auto lg:inline-flex lg:h-auto p-10 space-x-20  lg:w-auto lg:flex-row">
+            <Link href="/dashboard">
+              <a className="w-full items-center justify-center rounded px-3 py-2 font-bold text-white text-3xl hover:bg-green-600 hover:text-white lg:inline-flex lg:w-auto ">
+                Dashboard
+              </a>
+            </Link>
             <Link href="/items">
               <a className="w-full items-center justify-center rounded px-3 py-2 font-bold text-white text-3xl hover:bg-green-600 hover:text-white lg:inline-flex lg:w-auto ">
-                Items
+                Inventory
               </a>
             </Link>
           </div>

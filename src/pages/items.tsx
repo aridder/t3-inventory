@@ -25,9 +25,8 @@ const Items: NextPage = () => {
         <ItemCreate onSuccess={() => listUserItems.refetch()} />
         {item && <ItemTransfer onSuccess={transferItemOnSuccess} item={item} />}
 
-        {!listUserItems.data ? (
-          <div>Loading</div>
-        ) : (
+        {listUserItems.isLoading && <div>Loading</div>}
+        {listUserItems.data && (
           <ItemList
             items={listUserItems.data}
             onItemClick={(item) => setItem(item)}
