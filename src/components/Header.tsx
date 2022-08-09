@@ -22,6 +22,7 @@ export function Header() {
         return;
       }
       setUserId(data.id);
+      router.reload();
     },
     onError: (error) => {
       setError(error.message);
@@ -32,6 +33,7 @@ export function Header() {
   const signup = trpc.useMutation(["user.signup"], {
     onSuccess: (data) => {
       setUserId(data.id);
+      router.reload();
     },
     onError: (error) => {
       console.log("error", error);
